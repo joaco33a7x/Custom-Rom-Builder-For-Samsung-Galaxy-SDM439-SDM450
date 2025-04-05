@@ -9,11 +9,11 @@ on:
       GSI:
         description: 'direct link for Gsi image '
         required: true
-        default: 'https://sourceforge.net/projects/andyyan-gsi/files/lineage-19.x/lineage-19.1-20230715-UNOFFICIAL-a64_bgN.img.xz'        
+        default: 'https://github.com/cawilliamson/treble_voltage/releases/4.2-20250321.142314/VoltageOS-gapps-arm64-ab-4.2-20250321.123212-UNOFFICIAL.img.xz'        
       ARCH:
         description: 'ARM64 or ARM32?'
         required: true
-        default: '32'                
+        default: '64'                
       NAME:
         description: 'Rom Name'
         required: true
@@ -52,5 +52,5 @@ jobs:
     - name: Uploading The Zip
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ github.event.inputs.NAME }}   # Replace with a suitable name
+        name: ${{ github.event.inputs.NAME }}   #cus Replace with ame
         path: ./zip/Custom_Rom_SDM450.zip
