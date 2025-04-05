@@ -1,0 +1,56 @@
+name: Custom Rom Builder Samsung Galaxy A11/M11
+
+on:
+  push:
+    branches:
+      - main  # Change this to your desired branch
+  workflow_dispatch:
+    inputs:
+      GSI:
+        description: 'direct link for Gsi image '
+        required: true
+        default: 'https://github.com/cawilliamson/treble_voltage/releases/download/4.2-20250321.142314/VoltageOS-gapps-arm64-ab-4.2-20250321.123212-UNOFFICIAL.img.xz'        
+      ARCH:
+        description: 'ARM64 or ARM32?'
+        required: true
+        default: '64'                
+      NAME:
+        description: 'Rom Name'
+        required: true
+        default: 'VoltageOS_A11_M11_ARM64_Gapps'                
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Install Dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y zip xz-utils unzip p7zip-full wget
+        
+    - name: Preparing Files
+      run: |
+        wget https://sourceforge.net/projects/samsung-galaxy-a01-m01/files/a11q.zip
+        git clone https://github.com/smiley9000/Custom-Rom-Builder-For-Samsung-Galaxy-A11-M11
+        unzip a11q.zip
+        rm -r a11q.zip
+
+    - name: Downloading your GSI
+      run: |
+        wget -P "./temp" ${{ github.event.inputs.GSI }} 
+        chmod 755 *
+        chmod 755 ./bin/*
+
+    - name: Building
+      run: |
+        ./arm${{ github.event.inputs.ARCH }}_git
+        
+    - name: Uploading The Zip
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.event.inputs.NAME }}   # Replace with a suitable name
+        path: ./zip/Custom_Rom_SDM450.zip
